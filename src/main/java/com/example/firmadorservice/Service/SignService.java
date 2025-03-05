@@ -42,7 +42,6 @@ public class SignService {
     @Autowired
     FileService fileService;
 
-    // Se inyecta para poder guardar en registrofirma
     @Autowired
     RegistroFirmaRepository registroFirmaRepository;
 
@@ -96,12 +95,12 @@ public class SignService {
                         rutaFile = sSignerProperty.getModificadoGlosaFolderPath() + "/" + sSignerProperty.getFilesToSign();
                     } else {
                         // tipo == 1
-                        if (sSignerProperty.getNroVistos() > 0) {
+                        if(sSignerProperty.getNroVistos() == 0){
                             fileService.insertGlosa(sSignerProperty);
                             fileService.insertCorrelativo(sSignerProperty);
-                            rutaFile = sSignerProperty.getModificadoTituloFolderPath() + "/" + sSignerProperty.getFilesToSign();
-                        } else {
-                            rutaFile = sSignerProperty.getOriginFolderPath() + "/" + sSignerProperty.getFilesToSign();
+                            rutaFile = sSignerProperty.getModificadoTituloFolderPath()+ "/" + sSignerProperty.getFilesToSign();
+                        }else{
+                            rutaFile = sSignerProperty.getOriginFolderPath()+"/"+sSignerProperty.getFilesToSign();
                         }
                     }
 
@@ -140,7 +139,7 @@ public class SignService {
                         // Firma con título
                         fileService.createFirmaConTituloImageFile(sSignerProperty, nombresFirmante, motivo, sdf);
                         WidthFirm = 525;
-                        HeightFirm = 80 + (float) sSignerProperty.getPosicionSuperior() / 3;
+                        HeightFirm = 80 + sSignerProperty.getPosicionSuperior() / 3;
                         XFirm = sSignerProperty.getPosX();
                         YFirm = sSignerProperty.getPosY();
                     } else {
